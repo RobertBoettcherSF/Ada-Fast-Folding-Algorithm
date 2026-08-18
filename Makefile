@@ -1,20 +1,13 @@
 .PHONY: all test clean
 
-GNAT = gnatmake
-OBJ_DIR = obj
-BIN_DIR = bin
+all: test
 
-all: $(BIN_DIR)/main$(BIN_DIR)/tests
+test: bin/tests
+	./bin/tests
 
-$(BIN_DIR)/main: main.adb fast_folding.adb fast_folding.ads
-	mkdir -p $(OBJ_DIR) $(BIN_DIR)$(GNAT) -D $(OBJ_DIR) -o$(BIN_DIR)/main main.adb
-
-$(BIN_DIR)/tests: tests.adb fast_folding.adb fast_folding.ads
-	mkdir -p $(OBJ_DIR) $(BIN_DIR)$(GNAT) -D $(OBJ_DIR) -o$(BIN_DIR)/tests tests.adb
-
-test: $(BIN_DIR)/tests
-	@echo "Running tests..."
-	@$(BIN_DIR)/tests
+bin/tests: tests.adb
+	mkdir -p obj bin
+	gnatmake -D obj -o bin/tests tests.adb
 
 clean:
-	rm -rf $(OBJ_DIR)$(BIN_DIR)
+	rm -rf obj bin
